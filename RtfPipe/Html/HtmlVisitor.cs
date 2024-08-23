@@ -607,10 +607,10 @@ namespace RtfPipe.Model
         _writer.WriteStartElement("img");
 
         if (image.Width.HasValue)
-          _writer.WriteAttributeString("width", image.Width.ToPx().ToString("0"));
+          _writer.WriteAttributeString("width", image.Width.ToPx().ToString("0", CultureInfo.InvariantCulture));
 
         if (image.Height.HasValue)
-          _writer.WriteAttributeString("height", image.Height.ToPx().ToString("0"));
+          _writer.WriteAttributeString("height", image.Height.ToPx().ToString("0", CultureInfo.InvariantCulture));
 
         _writer.WriteAttributeString("src", uri);
         _writer.WriteEndElement();

@@ -390,7 +390,7 @@ namespace RtfPipe.Model
       }
       else
       {
-        _builder.Append(width.ToString("0")).Append("px ");
+        _builder.Append(width.ToString("0", CultureInfo.InvariantCulture)).Append("px ");
         
         switch (border.Style)
         {
