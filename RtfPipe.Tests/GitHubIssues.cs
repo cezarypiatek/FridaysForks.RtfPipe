@@ -362,5 +362,12 @@ AC Reference: 12312443423\par \par \par
 ue\highlight0 \highlight3 Green\highlight0\par
 }");
     }
+    
+    
+    [TestMethod]
+    public void Issue68()
+    {
+      this.VerifyCurrentLegacyScenario(@"{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Verdana;} \viewkind4\uc1\pard\f0\fs18 5% Auf Patronen \par \f1\par }{\info{\creatim\yr0\mo0\dy0\hr0\min0}{\revtim\yr2021\mo12\dy31\hr11\min47}{\printim\yr0\mo0\dy0\hr0\min0}} {\f1\fnil Verdana;}}");
+    }
   }
 }

@@ -122,14 +122,19 @@ namespace RtfPipe
           else if (group.Contents.Count > 1
             && group.Contents[1] is Year yr)
           {
-            var date = new DateTime(
-              yr.Value,
-              group.Contents.OfType<Month>().FirstOrDefault()?.Value ?? 1,
-              group.Contents.OfType<Day>().FirstOrDefault()?.Value ?? 1,
-              group.Contents.OfType<Hour>().FirstOrDefault()?.Value ?? 0,
-              group.Contents.OfType<Minute>().FirstOrDefault()?.Value ?? 0,
-              group.Contents.OfType<Second>().FirstOrDefault()?.Value ?? 0);
-            document.Information[group.Contents[0]] = date;
+            try {
+              var date = new DateTime(
+                yr.Value,
+                group.Contents.OfType<Month>().FirstOrDefault()?.Value ?? 1,
+                group.Contents.OfType<Day>().FirstOrDefault()?.Value ?? 1,
+                group.Contents.OfType<Hour>().FirstOrDefault()?.Value ?? 0,
+                group.Contents.OfType<Minute>().FirstOrDefault()?.Value ?? 0,
+                group.Contents.OfType<Second>().FirstOrDefault()?.Value ?? 0);
+              document.Information[group.Contents[0]] = date;
+            }
+            catch {
+              // ignore malformed date
+            }
           }
           else if (group.Contents.Count == 1
             && group.Contents[0] is ControlWord<int> intWord)
