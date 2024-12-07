@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Eric Domke, Cezary Piątek</Authors>
     <Company />
@@ -9,6 +9,7 @@
     <Description>RtfPipe is a .NET library for parsing Rich Text Format (RTF) streams and converting them to HTML</Description>
     <PackageTags>html,rtf,rich text</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>FridaysForks.RtfPipe</PackageId>
     <LangVersion>10.0</LangVersion>    
   </PropertyGroup>
 
