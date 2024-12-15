@@ -235,3 +235,5 @@ $RECYCLE.BIN/
 *.lnk
 *.old
 .idea
+*.bak
+*.received.*

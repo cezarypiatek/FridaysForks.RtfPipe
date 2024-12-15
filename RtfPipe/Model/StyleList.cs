@@ -16,7 +16,12 @@ namespace RtfPipe.Model
     {
       if (token is SectionDefault)
       {
-        this.RemoveWhere(t => t.Type == TokenType.SectionFormat || t.Type == TokenType.ParagraphFormat || t.Type == TokenType.RowFormat || t.Type == TokenType.CellFormat);
+        //INFO: Inside the table, the \sectd command is redundant, as section properties typically do not affect table cells directly.
+        //      If the content copied into the cell comes from a part of the document with distinct section formatting, the \sectd command might get embedded.
+        if (this.Any(x => x is InTable) == false)
+        {
+          this.RemoveWhere(t =>  t.Type is TokenType.SectionFormat or TokenType.ParagraphFormat or TokenType.RowFormat or TokenType.CellFormat);
+        }
       }
       else if (token is ParagraphDefault)
       {
@@ -24,7 +29,7 @@ namespace RtfPipe.Model
       }
       else if (token is RowDefaults)
       {
-        this.RemoveWhere(t => t.Type == TokenType.RowFormat || t.Type == TokenType.CellFormat);
+        this.RemoveWhere(t => t.Type is TokenType.RowFormat or TokenType.CellFormat);
       }
       else if (token is CellDefaults)
       {

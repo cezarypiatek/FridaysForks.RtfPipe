@@ -25,4 +25,7 @@ public class TableTests
   
   [TestMethod]
   public void marge_scenario_7() => this.VerifyCurrentScenario();
+  
+  [TestMethod]
+  public void table_with_object() => this.VerifyCurrentScenario();
 }
