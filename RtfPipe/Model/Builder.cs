@@ -2,6 +2,7 @@ using RtfPipe.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace RtfPipe.Model
 {
@@ -174,6 +175,10 @@ namespace RtfPipe.Model
               {
                 paragraph.Add(picture);
               }
+            }
+            else if (dest is Field && TryGetImage(childGroup) is {} externalImage)
+            {
+              paragraph.Add(externalImage);
             }
             else if (dest is Footnote)
             {
@@ -445,6 +450,32 @@ namespace RtfPipe.Model
       OrganizeLists(root);
       OrganizeParagraphBorders(root);
       return root;
+    }
+
+    private static ExternalPicture TryGetImage(Group childGroup)
+    {
+      if (childGroup.Contents.OfType<Group>().FirstOrDefault(x=>x.Contents.OfType<FieldInstructions>().Any()) is {} result && result.Contents.Count > 1)
+      {
+        if (result.Contents.OfType<FieldInstructions>().Any())
+        {
+          foreach (var insGroup in result.Contents.OfType<Group>())
+          {
+            if(insGroup.Contents.OfType<TextToken>().FirstOrDefault(t=> t.Value?.Contains("INCLUDEPICTURE") == true) is { } includePicture)
+            {
+              if (includePicture.Value.Contains("\\d"))
+              {
+                var match = Regex.Match(includePicture.Value, "\"(.*?)\"");
+                if (match.Success && match.Groups.Count == 2)
+                {
+                  return new ExternalPicture(match.Groups[1].Value);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return null;
     }
 
     private void AddFootnotes(Element root, List<IToken> footnoteGroup, Document document, List<IToken> defaultStyles)

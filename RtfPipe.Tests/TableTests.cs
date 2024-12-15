@@ -28,4 +28,7 @@ public class TableTests
   
   [TestMethod]
   public void table_with_object() => this.VerifyCurrentScenario();
+  
+  [TestMethod]
+  public void table_with_field_instruction_image() => this.VerifyCurrentScenario();
 }

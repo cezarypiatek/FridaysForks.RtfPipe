@@ -615,6 +615,15 @@ namespace RtfPipe.Model
         _writer.WriteEndElement();
       }
     }
+    
+    
+    
+    public void Visit(ExternalPicture image)
+    {
+      _writer.WriteStartElement("img");
+      _writer.WriteAttributeString("src", image.Uri);
+      _writer.WriteEndElement();
+    }
 
     public void Visit(Anchor anchor)
     {

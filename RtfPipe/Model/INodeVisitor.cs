@@ -11,6 +11,7 @@ namespace RtfPipe.Model
     void Visit(Element element);
     void Visit(HorizontalRule horizontalRule);
     void Visit(Picture image);
+    void Visit(ExternalPicture image);
     void Visit(Run run);
   }
 }
