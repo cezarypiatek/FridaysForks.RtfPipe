@@ -406,7 +406,7 @@ namespace RtfPipe
           }
           else
           {
-            _document.ColorTable.Add(new ColorValue(0, 0, 0));
+            _document.ColorTable.Add(ColorValue.Auto); // Empty color (auto)
           }
 
           _context.Peek().TokenBuffer.Clear();

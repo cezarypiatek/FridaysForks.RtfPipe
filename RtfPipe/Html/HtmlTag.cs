@@ -100,8 +100,8 @@ namespace RtfPipe.Model
     {
       Styles =
       {
-        new BackgroundColor(new ColorValue(255, 255, 0)),
-        new ForegroundColor(new ColorValue(0, 0, 0))
+        new BackgroundColor(ColorValue.Yellow),
+        new ForegroundColor(ColorValue.Black)
       }
     };
     public static HtmlTag Meta { get; } = new HtmlTag("meta");

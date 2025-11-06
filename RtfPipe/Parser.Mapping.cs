@@ -10,6 +10,8 @@ namespace RtfPipe
 
     private IToken GetControlWord(string name, int number = int.MinValue)
     {
+      ColorValue color;
+
       switch (name)
       {
         // Characters
@@ -393,16 +395,16 @@ namespace RtfPipe
         case "caps":
           return new IsAllCaps(number != 0);
         case "cbpat":
-          return new ParagraphBackgroundColor(ColorByIndex(number));
+          return ColorByIndex(number, out color) ? new ParagraphBackgroundColor(color) : null;
         case "cb":
         case "chcbpat":
         case "highlight":
-          return new BackgroundColor(number == 0 ? new ColorValue(255, 255, 255) : ColorByIndex(number));
+          return ColorByIndex(number, out color) ? new BackgroundColor(color) : null;
         case "shading":
           var shade = (byte)(255 - Math.Min(Math.Max(0, number * 255 / 10000), 255));
           return new ParagraphBackgroundColor(new ColorValue(shade, shade, shade));
         case "cf":
-          return new ForegroundColor(ColorByIndex(number));
+          return ColorByIndex(number, out color) ? new ForegroundColor(color) : null;
         case "dn":
           if (number > 0)
             return new PositionOffset(UnitValue.FromHalfPoint(number));
@@ -434,7 +436,7 @@ namespace RtfPipe
         case "ul":
           return new IsUnderline(number != 0);
         case "ulc":
-          return new UnderlineColor(ColorByIndex(number));
+          return ColorByIndex(number, out color) ? new UnderlineColor(color) : null;
         case "uld":
           return new UnderlineDotted();
         case "uldash":
@@ -616,7 +618,7 @@ namespace RtfPipe
         case "clvertalb":
           return new CellVerticalAlign(VerticalAlignment.Bottom);
         case "clcbpat":
-          return new CellBackgroundColor(ColorByIndex(number));
+          return ColorByIndex(number, out color) ? new CellBackgroundColor(color) : null;
         case "nesttableprops":
           return new NestedTableProperties();
         case "nonesttables":
@@ -665,7 +667,7 @@ namespace RtfPipe
         case "brdrw":
           return new BorderWidth(new UnitValue(number, UnitType.Twip));
         case "brdrcf":
-          return new BorderColor(ColorByIndex(number));
+          return ColorByIndex(number, out color) ? new BorderColor(color) : null;
         case "brdrt":
           return new ParagraphBorderSide(BorderPosition.Top);
         case "brdrr":
@@ -729,13 +731,22 @@ namespace RtfPipe
           return new GenericWord(name, number);
       }
     }
-    
+
     static HashSet<string> known = new HashSet<string>();
-    private ColorValue ColorByIndex(int number)
+    /// <summary>
+    /// Find the color on the document color table by its index/positon.
+    /// </summary>
+    /// <param name="number">Position of the color.</param>
+    /// <param name="color">Color on the document color table.</param>
+    /// <returns>True if it is a custom defined color. False if it is defined as auto or default color.</returns>
+    private bool ColorByIndex(int number, out ColorValue color)
     {
       if (number >= 0 && number < _document.ColorTable.Count)
-        return _document.ColorTable[number];
-      return new ColorValue(0, 0, 0);
+        color = _document.ColorTable[number];
+      else
+        color = ColorValue.Auto; // If not found, returns auto color.
+
+      return !color.IsAuto;
     }
   }
 }

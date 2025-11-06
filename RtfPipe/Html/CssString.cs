@@ -36,15 +36,27 @@ namespace RtfPipe.Model
         else if (token is FontSize fontSize)
           Append("font-size", fontSize.Value.ToPt().ToString("0.#", CultureInfo.InvariantCulture) + "pt");
         else if (token is BackgroundColor background)
-          Append("background", "#" + background.Value);
+        {
+          if (!background.Value.IsAuto)
+            Append("background", "#" + background.Value);
+        }
         else if (token is ParagraphBackgroundColor backgroundPara)
-          Append("background", "#" + backgroundPara.Value);
+        {
+          if (!backgroundPara.Value.IsAuto)
+            Append("background", "#" + backgroundPara.Value);
+        }
         else if (token is CellBackgroundColor backgroundCell)
-          Append("background", "#" + backgroundCell.Value);
+        {
+          if (!backgroundCell.Value.IsAuto)
+            Append("background", "#" + backgroundCell.Value);
+        }
         else if (token is IsAllCaps capitalToken)
           Append("text-transform", capitalToken.Value ? "uppercase" : "none");
         else if (token is ForegroundColor color)
-          Append("color", "#" + color.Value);
+        {
+          if (!color.Value.IsAuto)
+            Append("color", "#" + color.Value);
+        }
         else if (token is TextAlign align)
           Append("text-align", align.Value.ToString().ToLowerInvariant());
         else if (token is SpaceAfter spaceAfter)
@@ -94,7 +106,10 @@ namespace RtfPipe.Model
         else if (token is IsDoubleStrike || token is UnderlineDouble)
           Append("text-decoration-style", "double");
         else if (token is UnderlineColor underlineColor)
-          Append("text-decoration-color", "#" + underlineColor.Value);
+        {
+          if (!underlineColor.Value.IsAuto)
+            Append("text-decoration-color", "#" + underlineColor.Value);
+        }
         else if (token is UnderlineWord)
           Append("text-decoration-skip", "spaces");
         else if (token is PositionOffset offset)
@@ -435,7 +450,7 @@ namespace RtfPipe.Model
             break;
         }
 
-        if (border.Color != null)
+        if (border.Color != null && !border.Color.IsAuto)
           _builder.Append(" #").Append(border.Color);
       }
 

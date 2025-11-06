@@ -16,10 +16,13 @@ namespace RtfPipe.Model
       {
         new FontSize(UnitValue.FromHalfPoint(24))
       };
+
       if (document.ColorTable.Any())
-        defaultStyles.Add(new ForegroundColor(document.ColorTable.First()));
-      else
-        defaultStyles.Add(new ForegroundColor(new ColorValue(0, 0, 0)));
+      {
+        var color = document.ColorTable.First();
+        if (!color.IsAuto)
+          defaultStyles.Add(new ForegroundColor(color));
+      }
 
       foreach (var token in document.Contents)
       {
