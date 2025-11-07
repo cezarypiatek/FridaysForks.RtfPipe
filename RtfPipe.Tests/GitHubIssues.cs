@@ -42,6 +42,27 @@ Finally, back to the default color.\line
     }
 
     [TestMethod]
+    public void Issue16b()
+    {
+      this.VerifyCurrentLegacyScenario(@"{\rtf1\ansi\deff0 {\fonttbl {\f0 Courier;}{\f1 ProFontWindows;}}
+{\colortbl;\red0\green0\blue0;\red255\green255\blue255;\red255\green0\blue255;\red255\green0\blue0;}
+\pard\chcbpat0\cb0\cbpat0
+This line is font 0 which is courier and use default color (no color tag will be added)\line
+\f1
+This line is font 1\line
+\f0
+This line is font 0 again\line
+This line has a \cf4 red \cf1 word\line
+\highlight3 while this line has a \cf2 white \cf1 word and is highlighted in magenta\line
+\highlight0\cb0\cf0 Finally, back to the default color. Color 0 is ""auto"" and it is transformed as ""no color"" on html.\par
+\pard\brdrt\brdrs\brdrw15\brdrcf4
+This paragraph has a red border top.\par
+\pard\brdrt\brdrs\brdrw15\brdrcf0
+This paragraph has a border top with default color.\par
+}");
+    }
+
+    [TestMethod]
     public void Issue17()
     {
       const string rtf = @"{\rtf1\ansi\ansicpg1252\uc1\deff1{

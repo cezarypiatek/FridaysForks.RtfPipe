@@ -15,8 +15,8 @@ namespace RtfPipe.Model
     private Stack<StyleList> _stack = new Stack<StyleList>();
     private IEnumerable<IToken> _stylesheet = new IToken[]
     {
-      new ForegroundColor(new ColorValue(0, 0, 0)),
-      new BackgroundColor(new ColorValue(255, 255, 255))
+      new ForegroundColor(ColorValue.Black),
+      new BackgroundColor(ColorValue.White)
     };
     private readonly XmlWriter _writer;
 
@@ -450,15 +450,18 @@ namespace RtfPipe.Model
       }
       if (styleList.TryRemoveFirst(out BackgroundColor highlight))
       {
-        _writer.WriteStartElement("mark");
-        styleList.RemoveWhere(s => s is ForegroundColor);
-        var markCss = new CssString(GetNewStyles(run.Styles.Where(s => s is BackgroundColor || s is ForegroundColor), HtmlTag.Mark), ElementType.Span, run.Styles);
-        if (markCss.Length > 0)
+        if (!highlight.Value.IsAuto)
         {
-          _writer.WriteAttributeString("style", markCss.ToString());
-          stylesWritten = true;
+          _writer.WriteStartElement("mark");
+          styleList.RemoveWhere(s => s is ForegroundColor);
+          var markCss = new CssString(GetNewStyles(run.Styles.Where(s => s is BackgroundColor || s is ForegroundColor), HtmlTag.Mark), ElementType.Span, run.Styles);
+          if (markCss.Length > 0)
+          {
+            _writer.WriteAttributeString("style", markCss.ToString());
+            stylesWritten = true;
+          }
+          endTags++;
         }
-        endTags++;
       }
 
       var css = new CssString(styleList, elementType, run.Styles);
